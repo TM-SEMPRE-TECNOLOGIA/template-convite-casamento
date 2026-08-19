@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<title>Alex &amp; Rúbia · Casamento</title>
+<meta property="og:title" content="Alex & Rúbia · Casamento">
+<meta property="og:description" content="27 de Setembro de 2026 · Praia de Maracaípe — em frente à Pousada Maraoka">
+<meta property="og:type" content="website">
+<style>
+/* ═══════════════════════════════════════════════
+   ALEX & RÚBIA — Convite interativo
+   Reclone de webgencyinvitations.com/thesacredgarden
+   Paleta: verde oliva + branco (cliente)
+   Transição capa → vídeo → tela replicada do original
+   ═══════════════════════════════════════════════ */
+
+@font-face { font-family: 'Cinzel'; src: url('assets/fonts/cinzel.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: 'Ovo'; src: url('assets/fonts/ovo.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Imperial Script'; src: url('assets/fonts/imperial-script.woff') format('woff'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'BeauRivage'; src: url('assets/fonts/beaurivage.woff') format('woff'); font-weight: 400; font-display: swap; }
+
+:root {
+  --olive:      #556B2F;   /* verde oliva principal */
+  --olive-dark: #3E4A22;   /* verde oliva profundo */
+  --olive-soft: #E8ECDD;   /* verde oliva claro */
+  --olive-tint: #F3F5EC;   /* fundo quase branco */
+  --cream:      #FAF8F1;   /* branco-creme */
+  --white:      #FFFFFF;
+  --ink:        #2F3623;   /* texto escuro oliva */
+  --muted:      #6B7254;   /* texto suave */
+  --gold:       #C2A55C;   /* dourado suave (borda iluminada) */
+  --gold-soft:  #E6D5A8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Ovo', Georgia, serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+
+/* ── CAPA (envelope) ─────────────────────────────── */
+#weiOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 1.4s ease;
+}
+
+#weiMonogram {
+  font-family: 'Imperial Script', 'BeauRivage', cursive;
+  font-size: clamp(90px, 22vw, 150px);
+  line-height: 1;
+  color: var(--olive-dark);
+  letter-spacing: 0.04em;
+  text-align: center;
+  user-select: none;
+  animation: weiMonoIn 1.6s 0.2s both;
+}
+#weiMonogram small {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(11px, 2.6vw, 15px);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--olive);
+  display: block;
+  margin-top: 14px;
+}
+@keyframes weiMonoIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Selo de cera (wax seal) com borda iluminada ── */
+#weiSeal {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  margin-top: 46px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--olive) 0%, var(--olive-dark) 78%);
+  box-shadow: 0 0 0 6px var(--cream), 0 0 0 7px var(--gold-soft), 0 0 26px 6px rgba(194,165,92,0.55);
+  animation: weiSealGlow 2.4s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+  transition: transform 0.9s cubic-bezier(0.6, -0.2, 0.3, 1.2), opacity 0.6s ease;
+}
+@keyframes weiSealGlow {
+  0%, 100% { box-shadow: 0 0 0 6px var(--cream), 0 0 0 7px var(--gold-soft), 0 0 20px 4px rgba(194,165,92,0.45); }
+  50%      { box-shadow: 0 0 0 6px var(--cream), 0 0 0 7px var(--gold),     0 0 34px 10px rgba(194,165,92,0.85); }
+}
+#weiSeal::before, #weiSeal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.28);
+  border-top-color: rgba(255,255,255,0.65);
+  border-right-color: rgba(255,255,255,0.5);
+}
+#weiSeal::before { transform: rotate(38deg); }
+#weiSeal::after  { transform: rotate(-28deg); }
+#weiSeal span {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 40px;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+}
+#weiSeal::marker { display: none; }
+
+/* estado aberto: duas metades partem */
+#weiSeal.wei-seal-open {
+  transform: scale(1.06);
+  opacity: 0;
+}
+#weiSeal.wei-seal-open::before {
+  animation: weiSealHalfL 0.9s cubic-bezier(0.6, -0.2, 0.3, 1.2) forwards;
+}
+#weiSeal.wei-seal-open::after {
+  animation: weiSealHalfR 0.9s cubic-bezier(0.6, -0.2, 0.3, 1.2) forwards;
+}
+@keyframes weiSealHalfL {
+  from { transform: rotate(38deg); }
+  to   { transform: rotate(38deg) translateX(-64px) rotate(160deg); opacity: 0; }
+}
+@keyframes weiSealHalfR {
+  from { transform: rotate(-28deg); }
+  to   { transform: rotate(-28deg) translateX(64px) rotate(-160deg); opacity: 0; }
+}
+
+#weiTapWrap {
+  position: absolute;
+  bottom: 26%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  animation: weiTapIn 1.2s 0.8s both;
+}
+@keyframes weiTapIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+#weiTapLabel {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(62, 74, 34, 0.75);
+  animation: weiPulse 2.4s 1.6s ease-in-out infinite;
+  white-space: nowrap;
+}
+@keyframes weiPulse {
+  0%, 100% { opacity: 0.45; letter-spacing: 0.26em; }
+  50%      { opacity: 1;    letter-spacing: 0.30em; }
+}
+.wei-chevron {
+  width: 10px;
+  height: 10px;
+  border-right: 1.5px solid rgba(62, 74, 34, 0.6);
+  border-top: 1.5px solid rgba(62, 74, 34, 0.6);
+  transform: rotate(-45deg);
+  animation: weiChevron 2.4s 1.9s ease-in-out infinite;
+}
+@keyframes weiChevron {
+  0%, 100% { transform: rotate(-45deg) translate(0, 0); opacity: 0.6; }
+  50%      { transform: rotate(-45deg) translate(2px, -2px); opacity: 1; }
+}
+
+/* ── Vídeo de abertura ─────────────────────────── */
+#weiVideoWrap {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+#weiVideoWrap.wei-video-in { opacity: 1; pointer-events: all; }
+#weiVideoWrap.wei-video-out { opacity: 0; transition: opacity 1.4s ease; }
+#weiVideo {
+  width: 100%;
+  max-width: 440px;
+  display: block;
+  object-fit: contain;
+}
+
+/* ── Botão flutuante de áudio ──────────────────── */
+#weiAudioBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: var(--olive-dark);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2147483647;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.22), 0 0 0 1px var(--gold-soft);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+#weiAudioBtn svg { width: 30px; height: 30px; fill: var(--cream); }
+
+/* ── Conteúdo principal ────────────────────────── */
+.wrap { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px 60px;
+  background:
+    radial-gradient(ellipse at top, var(--olive-soft) 0%, transparent 60%),
+    var(--cream);
+}
+.hero-script {
+  font-family: 'Imperial Script', 'BeauRivage', cursive;
+  font-size: clamp(64px, 14vw, 104px);
+  line-height: 1.05;
+  color: var(--olive-dark);
+}
+.hero-script em { font-style: italic; }
+.hero-sub {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(12px, 2.8vw, 15px);
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin-top: 18px;
+}
+.hero-date {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(15px, 3.4vw, 19px);
+  letter-spacing: 0.22em;
+  color: var(--ink);
+  margin-top: 22px;
+}
+.hero-line {
+  width: 56px; height: 1px;
+  background: var(--gold);
+  margin: 22px auto;
+}
+.hero-msg {
+  font-size: clamp(14px, 3.2vw, 17px);
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 420px;
+}
+.hero-photo {
+  width: min(78vw, 300px);
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 4px;
+  margin: 38px auto 0;
+  box-shadow: 0 18px 44px rgba(62,74,34,0.22);
+  border: 1px solid var(--olive-soft);
+}
+.hero-scroll {
+  margin-top: 44px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.hero-scroll .chev {
+  width: 9px; height: 9px;
+  border-right: 1.5px solid var(--olive);
+  border-top: 1.5px solid var(--olive);
+  transform: rotate(135deg);
+  animation: scrollChev 1.8s ease-in-out infinite;
+}
+@keyframes scrollChev {
+  0%, 100% { transform: rotate(135deg) translate(0,0); opacity: 0.5; }
+  50%      { transform: rotate(135deg) translate(3px,-3px); opacity: 1; }
+}
+
+/* seções */
+.section { padding: 84px 24px; text-align: center; }
+.section-alt { background: var(--white); }
+.sec-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--olive);
+}
+.sec-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(22px, 5vw, 30px);
+  color: var(--olive-dark);
+  margin-top: 14px;
+  font-weight: 500;
+}
+.sec-title.script {
+  font-family: 'Imperial Script', cursive;
+  font-size: clamp(44px, 9vw, 64px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+.sec-line { width: 56px; height: 1px; background: var(--gold); margin: 20px auto; }
+.sec-text { font-size: clamp(14px, 3.2vw, 16px); line-height: 1.75; color: var(--muted); max-width: 460px; margin: 0 auto; }
+
+/* countdown */
+.countdown { display: flex; justify-content: center; gap: 18px; margin-top: 40px; flex-wrap: wrap; }
+.cd-unit { min-width: 74px; }
+.cd-number {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(34px, 8vw, 46px);
+  color: var(--olive-dark);
+  line-height: 1.1;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.cd-unit.revealed .cd-number { opacity: 1; transform: none; }
+.cd-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 8px;
+  opacity: 0;
+  transition: opacity 0.7s ease 0.15s;
+}
+.cd-unit.revealed .cd-label { opacity: 1; }
+.cd-sep {
+  font-family: 'Cinzel', serif;
+  font-size: 30px;
+  color: var(--gold);
+  padding-top: 6px;
+  opacity: 0;
+  transition: opacity 0.7s ease 0.3s;
+}
+.cd-sep.revealed { opacity: 1; }
+
+/* cards de informação */
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--olive-soft);
+  border-radius: 6px;
+  padding: 34px 26px;
+  margin-top: 34px;
+  box-shadow: 0 10px 30px rgba(62,74,34,0.08);
+}
+.info-card h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--olive);
+  font-weight: 500;
+}
+.info-card .big {
+  font-family: 'Imperial Script', cursive;
+  font-size: clamp(40px, 8vw, 54px);
+  color: var(--olive-dark);
+  margin-top: 12px;
+  line-height: 1.1;
+}
+.info-card p { color: var(--muted); margin-top: 10px; font-size: 15px; line-height: 1.6; }
+.info-card .hl { color: var(--ink); font-weight: 400; }
+
+.map-frame {
+  margin-top: 30px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--olive-soft);
+  box-shadow: 0 10px 30px rgba(62,74,34,0.12);
+}
+.map-frame iframe { width: 100%; height: 340px; border: 0; display: block; }
+
+/* botões */
+.btn {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 16px 34px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid var(--olive-dark);
+  transition: all 0.25s ease;
+  color: var(--olive-dark);
+  background: transparent;
+  margin-top: 30px;
+}
+.btn:hover { background: var(--olive-dark); color: var(--cream); }
+.btn-solid { background: var(--olive-dark); color: var(--cream); }
+.btn-solid:hover { background: var(--olive); border-color: var(--olive); }
+
+/* RSVP form */
+.rsvp-form {
+  background: var(--white);
+  border: 1px solid var(--olive-soft);
+  border-radius: 6px;
+  padding: 36px 28px;
+  margin-top: 36px;
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(62,74,34,0.08);
+}
+.field { margin-bottom: 20px; }
+.field label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--olive-dark);
+  display: block;
+  margin-bottom: 8px;
+}
+.field input[type="text"],
+.field input[type="number"] {
+  width: 100%;
+  font-family: 'Ovo', serif;
+  font-size: 15px;
+  color: var(--ink);
+  padding: 12px 14px;
+  border: 1px solid #D8DCC9;
+  border-radius: 5px;
+  background: var(--olive-tint);
+  outline: none;
+}
+.field input:focus { border-color: var(--olive); }
+.field .hint { font-size: 12px; color: var(--muted); margin-top: 5px; font-style: italic; }
+.radio-row { display: flex; gap: 14px; flex-wrap: wrap; }
+.radio-opt {
+  flex: 1;
+  min-width: 130px;
+  border: 1px solid #D8DCC9;
+  border-radius: 5px;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--olive-tint);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+.radio-opt input { display: none; }
+.radio-opt.sel { border-color: var(--olive); background: var(--olive-soft); color: var(--olive-dark); font-weight: 700; }
+.btn-submit {
+  width: 100%;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 17px 20px;
+  border: none;
+  border-radius: 6px;
+  background: var(--olive-dark);
+  color: var(--cream);
+  cursor: pointer;
+  transition: background 0.25s ease;
+  margin-top: 6px;
+}
+.btn-submit:hover { background: var(--olive); }
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.4));
+  transform: translateX(-100%);
+}
+.btn-submit { position: relative; overflow: hidden; }
+.btn-submit.flash::before { animation: btnFlash 0.9s ease; }
+@keyframes btnFlash { 30% { transform: translateX(100%); } 100% { transform: translateX(100%); } }
+#rsvpOk {
+  display: none;
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 5px;
+  background: var(--olive-soft);
+  color: var(--olive-dark);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* final */
+.final { padding: 96px 24px 120px; text-align: center; }
+.final-names {
+  font-family: 'Imperial Script', cursive;
+  font-size: clamp(56px, 12vw, 88px);
+  color: var(--olive-dark);
+  line-height: 1.1;
+}
+.final-names em { font-style: italic; }
+.final-date {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin-top: 16px;
+}
+.final-seal {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--olive) 0%, var(--olive-dark) 78%);
+  margin: 34px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--cream);
+  box-shadow: 0 0 0 4px var(--cream), 0 0 0 5px var(--gold-soft), 0 0 18px rgba(194,165,92,0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body class="t-body" style="margin:0;">
+
+<!-- ── ÁUDIO ─────────────────────────────────────── -->
+<audio id="weiAudio" loop>
+  <source src="assets/musica.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ── CAPA (envelope) — replica exata do original ── -->
+<div id="weiOverlay">
+  <div id="weiMonogram">
+    A&nbsp;&amp;&nbsp;R
+    <small>Alex &amp; Rúbia</small>
+  </div>
+  <div id="weiSeal" role="button" aria-label="Abrir convite">
+    <span>A&amp;R</span>
+  </div>
+  <div id="weiTapWrap">
+    <div class="wei-chevron"></div>
+    <div id="weiTapLabel">Toque para abrir</div>
+  </div>
+</div>
+
+<!-- ── VÍDEO DE ABERTURA ─────────────────────────── -->
+<div id="weiVideoWrap">
+  <video id="weiVideo"
+    src="assets/video-abertura.mp4"
+    muted
+    playsinline
+    preload="auto"
+  ></video>
+</div>
+
+<!-- ── BOTÃO FLUTUANTE PLAY/PAUSE ─────────────────── -->
+<div id="weiAudioBtn" title="Música">
+  <svg id="weiIconPause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:block">
+    <rect x="6" y="5" width="4" height="14" rx="1"/>
+    <rect x="14" y="5" width="4" height="14" rx="1"/>
+  </svg>
+  <svg id="weiIconPlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none">
+    <polygon points="5,3 19,12 5,21"/>
+  </svg>
+</div>
+
+<!-- ════════════ TELA PRINCIPAL ════════════ -->
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="hero-script">Alex <em>&amp;</em> Rúbia</div>
+    <div class="hero-sub">Vamos nos casar</div>
+    <div class="hero-line"></div>
+    <div class="hero-date">27 · 09 · 2026 — às 14h</div>
+    <p class="hero-msg">Duas almas, um destino, uma história escrita com amor.
+      Junte-se a nós para celebrar o começo do nosso para sempre.</p>
+    <img class="hero-photo" src="assets/casal.webp" alt="Alex e Rúbia">
+    <div class="hero-scroll">
+      <div class="chev"></div>
+      Role para baixo
+    </div>
+  </section>
+
+  <!-- COUNTDOWN -->
+  <section class="section section-alt" id="contagem">
+    <div class="sec-label">Contagem regressiva</div>
+    <div class="sec-title">A celebração começa em</div>
+    <div class="sec-line"></div>
+    <div class="countdown" id="countdownContainer">
+      <div class="cd-unit"><div class="cd-number" id="cdDays">00</div><div class="cd-label">Dias</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-number" id="cdHours">00</div><div class="cd-label">Horas</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-number" id="cdMins">00</div><div class="cd-label">Min</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-number" id="cdSecs">00</div><div class="cd-label">Seg</div></div>
+    </div>
+  </section>
+
+  <!-- CERIMÔNIA / LOCAL -->
+  <section class="section" id="cerimonia">
+    <div class="sec-label">A cerimônia</div>
+    <div class="sec-title script">Maracaípe te espera</div>
+    <div class="sec-line"></div>
+    <div class="wrap">
+      <div class="info-card">
+        <h3>Data e horário</h3>
+        <div class="big">27 de Setembro</div>
+        <p><span class="hl">Domingo, 27/09/2026 · 14h</span></p>
+      </div>
+      <div class="info-card">
+        <h3>Local</h3>
+        <div class="big">Praia de Maracaípe</div>
+        <p>Em frente à <span class="hl">Pousada Maraoka</span><br>Maracaípe · Ipojuca · PE</p>
+      </div>
+      <div class="map-frame">
+        <iframe
+          src="https://www.google.com/maps?q=Pousada+Maraoka+Maraca%C3%ADpe+Ipojuca+PE&z=15&output=embed"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- RSVP -->
+  <section class="section section-alt" id="rsvp">
+    <div class="sec-label">Confirme sua presença</div>
+    <div class="sec-title">Estaremos esperando por você</div>
+    <div class="sec-line"></div>
+    <p class="sec-text">Para nos ajudar a preparar uma celebração alegre, confirme sua presença até 12/09/2026.</p>
+    <div class="wrap">
+      <form class="rsvp-form" id="rsvpForm">
+        <div class="field">
+          <label for="fNome">Seu nome</label>
+          <input type="text" id="fNome" name="nome" required placeholder="Nome completo">
+        </div>
+        <div class="field">
+          <label>Vai comparecer?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="presenca" value="Sim, com certeza!" required><span>Sim, com certeza!</span></label>
+            <label class="radio-opt"><input type="radio" name="presenca" value="Infelizmente não poderei"><span>Não poderei</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="fConvidados">Número de convidados</label>
+          <input type="number" id="fConvidados" name="convidados" min="1" max="20" required placeholder="Ex: 2">
+        </div>
+        <div class="field">
+          <label for="fMusica">Uma música que te faz dançar</label>
+          <input type="text" id="fMusica" name="musica" placeholder="Opcional">
+        </div>
+        <div class="field">
+          <label for="fCriancas">Crianças (nomes e idades)</label>
+          <input type="text" id="fCriancas" name="criancas" placeholder="Opcional">
+        </div>
+        <button type="submit" class="btn-submit" id="rsvpBtn">Confirmar pelo WhatsApp</button>
+        <div id="rsvpOk">✅ Abrindo WhatsApp para envio…</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section class="final">
+    <p class="sec-text">Estamos ansiosos para celebrar com você um dos dias mais especiais das nossas vidas.</p>
+    <div class="final-names" style="margin-top:26px">Alex <em>&amp;</em> Rúbia</div>
+    <div class="final-date">27 · 09 · 2026</div>
+    <div class="final-seal">A&amp;R</div>
+  </section>
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   TRANSIÇÃO CAPA → VÍDEO → TELA — replicada do original
+   (webgencyinvitations.com/thesacredgarden — overlay wei*)
+   1) Toque na capa → selo "abre" + overlay fade 1.4s
+   2) Vídeo fade-in 0.8s + áudio start simultâneos
+   3) Faltando 0.8s do fim → vídeo fade-out 1.4s
+   4) Botão flutuante de áudio aparece
+   ═══════════════════════════════════════════════════ */
+(function () {
+  var overlay   = document.getElementById('weiOverlay');
+  var seal      = document.getElementById('weiSeal');
+  var videoWrap = document.getElementById('weiVideoWrap');
+  var video     = document.getElementById('weiVideo');
+  var audio     = document.getElementById('weiAudio');
+  var audioBtn  = document.getElementById('weiAudioBtn');
+  var iconPause = document.getElementById('weiIconPause');
+  var iconPlay  = document.getElementById('weiIconPlay');
+  var done      = false;
+
+  function startVideo() {
+    if (done) return;
+    done = true;
+
+    // Selo de cera "abre" (metades partem) — borda iluminada já pulsava
+    seal.classList.add('wei-seal-open');
+
+    // Fade out da capa (mesmo tempo do original: 1.4s)
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+    setTimeout(function () { overlay.style.display = 'none'; }, 1400);
+
+    // Vídeo entra (0.8s) + música começa simultaneamente
+    videoWrap.classList.add('wei-video-in');
+    var vp = video.play();
+    if (vp && vp.catch) vp.catch(function(){});
+    audio.volume = 1;
+    var ap = audio.play();
+    if (ap && ap.catch) ap.catch(function(){});
+  }
+
+  function endSequence() {
+    // Fade out do vídeo (1.4s)
+    videoWrap.classList.remove('wei-video-in');
+    videoWrap.classList.add('wei-video-out');
+    setTimeout(function () { videoWrap.style.display = 'none'; }, 1400);
+
+    // Botão flutuante de áudio aparece
+    audioBtn.style.visibility = 'visible';
+    audioBtn.style.opacity = '1';
+  }
+
+  // Toque/click na capa (overlay inteiro = área de toque, como no original)
+  overlay.addEventListener('click', startVideo);
+  overlay.addEventListener('touchstart', startVideo, { passive: true });
+
+  // Falta 0.8s para o fim → começa a sair
+  video.addEventListener('timeupdate', function () {
+    if (video.duration && video.currentTime >= video.duration - 0.8 && !video.dataset.fading) {
+      video.dataset.fading = '1';
+      endSequence();
+    }
+  });
+
+  // Botão flutuante play/pause
+  audioBtn.addEventListener('click', function () {
+    if (audio.paused) {
+      audio.play();
+      iconPlay.style.display = 'none';
+      iconPause.style.display = 'block';
+    } else {
+      audio.pause();
+      iconPlay.style.display = 'block';
+      iconPause.style.display = 'none';
+    }
+  });
+
+  video.load();
+
+  /* ── COUNTDOWN → 27/09/2026 14h ── */
+  var eventDate = new Date('2026-09-27T14:00:00-03:00');
+  var elDays = document.getElementById('cdDays');
+  var elHours = document.getElementById('cdHours');
+  var elMins = document.getElementById('cdMins');
+  var elSecs = document.getElementById('cdSecs');
+  var revealed = false;
+
+  function tick() {
+    var now = new Date();
+    var dist = eventDate - now;
+    if (dist < 0) {
+      document.getElementById('countdownContainer').innerHTML = 'Estamos celebrando!';
+      return;
+    }
+    var d = String(Math.floor(dist / 86400000));
+    var h = String(Math.floor((dist % 86400000) / 3600000)).padStart(2, '0');
+    var m = String(Math.floor((dist % 3600000) / 60000)).padStart(2, '0');
+    var s = String(Math.floor((dist % 60000) / 1000)).padStart(2, '0');
+    elDays.textContent = d;
+    elHours.textContent = h;
+    elMins.textContent = m;
+    elSecs.textContent = s;
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  function doReveal() {
+    if (revealed) return;
+    revealed = true;
+    document.querySelectorAll('.cd-unit, .cd-sep').forEach(function (el) {
+      el.classList.add('revealed');
+    });
+  }
+  var observer = new IntersectionObserver(function (entries) {
+    if (entries[0].isIntersecting) { doReveal(); observer.disconnect(); }
+  }, { threshold: 0.4 });
+  observer.observe(document.getElementById('countdownContainer'));
+  setTimeout(function () {
+    var r = document.getElementById('countdownContainer').getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) doReveal();
+  }, 200);
+
+  /* ── RSVP → WhatsApp (55 81 8216-5064) ── */
+  var radios = document.querySelectorAll('input[name="presenca"]');
+  radios.forEach(function (r) {
+    r.addEventListener('change', function () {
+      document.querySelectorAll('.radio-opt').forEach(function (o) {
+        o.classList.toggle('sel', o.querySelector('input').checked);
+      });
+    });
+  });
+
+  document.getElementById('rsvpForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nome = document.getElementById('fNome').value.trim();
+    var presenca = document.querySelector('input[name="presenca"]:checked');
+    var convidados = document.getElementById('fConvidados').value.trim();
+    var musica = document.getElementById('fMusica').value.trim();
+    var criancas = document.getElementById('fCriancas').value.trim();
+
+    if (!nome || !presenca || !convidados) return;
+
+    var msg = '💚 Confirmação de presença — Casamento Alex & Rúbia\n'
+      + '\n👤 Nome: ' + nome
+      + '\n✅ Presença: ' + presenca.value
+      + '\n👥 Convidados: ' + convidados
+      + (musica ? '\n🎵 Música: ' + musica : '')
+      + (criancas ? '\n🧒 Crianças: ' + criancas : '')
+      + '\n\nEnviado pelo convite online.';
+
+    var btn = document.getElementById('rsvpBtn');
+    btn.classList.add('flash');
+    setTimeout(function () { btn.classList.remove('flash'); }, 1000);
+
+    window.open('https://wa.me/558182165064?text=' + encodeURIComponent(msg), '_blank');
+  });
+})();
+</script>
+</body>
+</html>
